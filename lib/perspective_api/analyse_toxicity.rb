@@ -18,11 +18,11 @@ class PerspectiveAPI::AnalyseToxicity
   end
 
   def call
-    if response.code == "200"
-      MultiJson.load response.body
-    else
+    unless response.code == "200"
       raise PerspectiveAPI::RequestError, response.body
     end
+
+    MultiJson.load response.body
   end
 
   private
@@ -39,7 +39,7 @@ class PerspectiveAPI::AnalyseToxicity
   end
 
   def request_body
-    MultiJson.dump request_hash.select { |key, value| !value.nil? }
+    MultiJson.dump(request_hash.reject { |key, value| value.nil? })
   end
 
   def request_hash

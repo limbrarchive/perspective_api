@@ -7,7 +7,7 @@ RSpec.describe PerspectiveAPI::AnalyseToxicity do
     MultiJson.dump(
       "attributeScores" => {
         "TOXICITY" => {
-          "spanScores" => [
+          "spanScores"   => [
             {
               "begin" => 0,
               "end"   => 31,
@@ -17,16 +17,19 @@ RSpec.describe PerspectiveAPI::AnalyseToxicity do
               }
             }
           ],
-          "summaryScore" => {"value" => score, "type"  => "PROBABILITY"}
+          "summaryScore" => {
+            "value" => score,
+            "type"  => "PROBABILITY"
+          }
         }
       },
-      "languages" => ["en"]
+      "languages"       => ["en"]
     )
   end
 
   def request_body(text)
     MultiJson.dump(
-      "comment" => {
+      "comment"             => {
         "text" => text,
         "type" => "PLAIN_TEXT"
       },
@@ -54,23 +57,25 @@ RSpec.describe PerspectiveAPI::AnalyseToxicity do
   it "returns the JSON response" do
     response = PerspectiveAPI::AnalyseToxicity.call("hello", :plain_text, {})
 
-    expect(response.keys).to eq(["attributeScores", "languages"])
+    expect(response.keys).to eq(%w[ attributeScores languages ])
   end
 
   it "handles exceptions" do
+    WebMock.reset!
+
     stub_request(:post, API_URI).to_return(
       :status => 400, :body => MultiJson.dump(
-        "error": {
-          "code": 400,
-          "message": "No requested attributes specified.",
-          "status": "INVALID_ARGUMENT"
+        "error" => {
+          "code"    => 400,
+          "message" => "No requested attributes specified.",
+          "status"  => "INVALID_ARGUMENT"
         }
       )
     )
 
-    expect {
+    expect do
       PerspectiveAPI::AnalyseToxicity.call("hello", :plain_text, {})
-    }.to raise_error(PerspectiveAPI::RequestError)
+    end.to raise_error(PerspectiveAPI::RequestError)
   end
 
   it "respects default options" do
@@ -78,10 +83,10 @@ RSpec.describe PerspectiveAPI::AnalyseToxicity do
 
     expect(
       a_request(:post, API_URI).
-      with { |request|
+      with do |request|
         json = MultiJson.load(request.body)
         json["requestedAttributes"] == {"TOXICITY" => {}}
-      }
+      end
     ).to have_been_made.once
   end
 
@@ -91,10 +96,10 @@ RSpec.describe PerspectiveAPI::AnalyseToxicity do
 
     expect(
       a_request(:post, API_URI).
-      with { |request|
+      with do |request|
         json = MultiJson.load(request.body)
         json["doNotStore"] == true
-      }
+      end
     ).to have_been_made.once
   end
 end

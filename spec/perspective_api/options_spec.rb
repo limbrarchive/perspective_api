@@ -42,14 +42,14 @@ RSpec.describe PerspectiveAPI::Options do
   end
 
   it "does not allow unknown keys when setting" do
-    expect {
+    expect do
       PerspectiveAPI::Options.set :foo => "bar"
-    }.to raise_error(PerspectiveAPI::Options::UnexpectedOptionsError)
+    end.to raise_error(PerspectiveAPI::Options::UnexpectedOptionsError)
   end
 
   it "does not allow unknown keys when applying" do
-    expect {
+    expect do
       PerspectiveAPI::Options.apply :foo => "bar"
-    }.to raise_error(PerspectiveAPI::Options::UnexpectedOptionsError)
+    end.to raise_error(PerspectiveAPI::Options::UnexpectedOptionsError)
   end
 end

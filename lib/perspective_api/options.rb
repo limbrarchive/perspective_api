@@ -1,12 +1,14 @@
 class PerspectiveAPI::Options
-  KNOWN_KEYS = %i( context_entries attributes languages do_not_store
-    client_token session_id api_key )
+  KNOWN_KEYS = %i[
+    context_entries attributes languages do_not_store client_token session_id
+    api_key
+  ].freeze
 
   UnexpectedOptionsError = Class.new PerspectiveAPI::Error
 
   @mutex    = Mutex.new
   @defaults = {
-    :attributes => {"TOXICITY" => {}},
+    :attributes => {"TOXICITY" => {}}
   }.freeze
 
   def self.get

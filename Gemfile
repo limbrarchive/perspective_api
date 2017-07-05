@@ -3,21 +3,22 @@ source "https://rubygems.org"
 gemspec
 
 # Latest commits are frozen-string-literal friendly.
-%w(
+%w[
   rspec
   rspec-core
   rspec-expectations
   rspec-mocks
   rspec-support
-).each do |library|
+].each do |library|
   gem library, :git => "https://github.com/rspec/#{library}.git"
 end
 
 # Unmerged pull requests for frozen string literals.
-%w(
-  webmock
+%w[
   addressable
-).each do |library|
+  parser
+  webmock
+].each do |library|
   gem library,
     :git    => "https://github.com/pat/#{library}.git",
     :branch => "frozen-string-literals"

@@ -9,7 +9,8 @@ module PerspectiveAPI
 
   def self.analyse_toxicity(text, type = nil, options = {})
     if type.is_a?(Hash)
-      type, options = nil, type
+      options = type
+      type    = nil
     end
 
     PerspectiveAPI::AnalyseToxicity.call text, type, options
